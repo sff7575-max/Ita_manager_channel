@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مدیریت کامل کانال ایتا</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Tahoma, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 10px;
+            min-height: 100vh;
+        }
+        
+        .app {
+            max-width: 100%;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .header {
+            background: #0088cc;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+        
+        .token {
+            background: rgba(255,255,255,0.2);
+            padding: 8px;
+            border-radius: 5px;
+            font-size: 12px;
+            word-break: break-all;
+            margin-top: 10px;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #f0f0f0;
+            border-bottom: 2px solid #ddd;
+        }
+        
+        .tab {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 14px;
+            text-align: center;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab.active {
+            background: white;
+            border-bottom: 3px solid #0088cc;
+            color: #0088cc;
+            font-weight: bold;
+        }
+        
+        .content {
+            display: none;
+            padding: 20px;
+        }
+        
+        .content.active {
+            display: block;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border: 1px solid #e0e0e0;
+        }
+        
+        .card h3 {
+            margin-bottom: 15px;
+            color: #333;
+            border-bottom: 2px solid #0088cc;
+            padding-bottom: 8px;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .btn {
+            background: #0088cc;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 8px 0;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn:hover {
+            background: #0077bb;
+        }
+        
+        .btn-success {
+            background: #4CAF50;
+        }
+        
+        .btn-warning {
+            background: #FF9800;
+        }
+        
+        .btn-danger {
+            background: #f44336;
+        }
+        
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 14px;
+            width: auto;
+            margin: 3px;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .stat-box {
+            background: #0088cc;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        
+        .post-item {
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+        
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .post-id {
+            background: #0088cc;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+        
+        .post-date {
+            color: #666;
+            font-size: 12px;
+        }
+        
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin: 10px 0;
+        }
+        
+        .tag {
+            background: #e3f2fd;
+            color: #0088cc;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+        }
+        
+        .category {
+            background: #e8f5e9;
+            color: #4CAF50;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            margin: 2px;
+        }
+        
+        .message {
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            display: none;
+        }
+        
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+        
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+        
+        .info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+            display: block;
+        }
+        
+        .datetime-row {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        
+        .datetime-row input, .datetime-row select {
+            flex: 1;
+        }
+        
+        .scheduled-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .scheduled-item {
+            border-left: 4px solid #FF9800;
+            padding: 10px;
+            margin: 8px 0;
+            background: #fff8e1;
+        }
+        
+        .scheduled-time {
+            background: #FF9800;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            display: inline-block;
+            margin-top: 5px;
+        }
+        
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 8px;
+            margin: 10px 0;
+        }
+        
+        .cat-btn {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .cat-btn.selected {
+            background: #e3f2fd;
+            border-color: #0088cc;
+            color: #0088cc;
+            font-weight: bold;
+        }
+        
+        .hashtag-input {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            min-height: 60px;
+            align-items: center;
+        }
+        
+        .hashtag-item {
+            background: #e3f2fd;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+        
+        @media (max-width: 600px) {
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .datetime-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+        <!-- هدر -->
+        <div class="header">
+            <h1>مدیریت حرفه‌ای کانال ایتا</h1>
+            <div class="token">
+                توکن: bot431140:2bbc7c9f-a2e8-4786-900a-0701754f1300
+            </div>
+        </div>
+
+        <!-- تب‌ها -->
+        <div class="tabs">
+            <button class="tab active" id="tab1" onclick="showPage(1)">🏠 خانه</button>
+            <button class="tab" id="tab2" onclick="showPage(2)">📝 پست جدید</button>
+            <button class="tab" id="tab3" onclick="showPage(3)">🕒 زمان‌دار</button>
+            <button class="tab" id="tab4" onclick="showPage(4)">📂 دسته‌بندی</button>
+            <button class="tab" id="tab5" onclick="showPage(5)">⚙️ تنظیمات</button>
+        </div>
+
+        <!-- پیام‌ها -->
+        <div id="message"></div>
+
+        <!-- صفحه 1: خانه -->
+        <div id="page1" class="content active">
+            <div class="card">
+                <h3>📊 آمار کانال</h3>
+                <div class="stats">
+                    <div class="stat-box">
+                        <div>پست‌ها</div>
+                        <div class="stat-number" id="totalPosts">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div>زمان‌دار</div>
+                        <div class="stat-number" id="scheduledCount">0</div>
+                    </div>
+                    <div class="stat-box">
+                        <div>دسته‌ها</div>
+                        <div class="stat-number">6</div>
+                    </div>
+                    <div class="stat-box">
+                        <div>امروز</div>
+                        <div class="stat-number" id="todayPosts">0</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>🚀 اقدامات سریع</h3>
+                <button class="btn" onclick="getPostsFromAPI()">
+                    🔄 دریافت از ایتا
+                </button>
+                <button class="btn btn-success" onclick="showPage(2)">
+                    ✍️ پست جدید
+                </button>
+                <button class="btn btn-warning" onclick="autoCategorize()">
+                    🏷️ دسته‌بندی خودکار
+                </button>
+                <button class="btn" onclick="showPage(3)">
+                    🕒 مدیریت زمان‌دار
+                </button>
+            </div>
+
+            <div class="card">
+                <h3>📌 آخرین پست‌ها</h3>
+                <div id="latestPosts">در حال بارگذاری...</div>
+            </div>
+        </div>
+
+        <!-- صفحه 2: پست جدید -->
+        <div id="page2" class="content">
+            <div class="card">
+                <h3>✍️ ایجاد پست جدید</h3>
+                <textarea id="postText" placeholder="متن پست را اینجا بنویسید..."></textarea>
+                
+                <div style="margin: 15px 0;">
+                    <label>هشتگ‌ها:</label>
+                    <div class="hashtag-input" id="hashtagBox">
+                        <input type="text" id="hashtagInput" placeholder="#هشتگ را بنویسید و Enter بزنید" 
+                               onkeypress="addHashtagOnEnter(event)">
+                    </div>
+                </div>
+
+                <div style="margin: 15px 0;">
+                    <label>دسته‌بندی:</label>
+                    <div class="categories-grid" id="categoriesSelect">
+                        <!-- دسته‌ها -->
+                    </div>
+                </div>
+
+                <div style="margin: 15px 0;">
+                    <label>
+                        <input type="checkbox" id="scheduleCheck" onchange="toggleSchedule()">
+                        🕒 ارسال زمان‌دار
+                    </label>
+                </div>
+
+                <div id="scheduleOptions" style="display: none;">
+                    <div class="datetime-row">
+                        <input type="date" id="postDate" min="">
+                        <input type="time" id="postTime" value="20:00">
+                    </div>
+                    <select id="repeatOption">
+                        <option value="none">بدون تکرار</option>
+                        <option value="daily">هر روز</option>
+                        <option value="weekly">هر هفته</option>
+                        <option value="monthly">هر ماه</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-success" onclick="createPost()">
+                    📤 ارسال پست
+                </button>
+                <button class="btn" onclick="previewPost()">
+                    👁️ پیش‌نمایش
+                </button>
+            </div>
+
+            <div class="card" id="previewCard" style="display: none;">
+                <h3>👁️ پیش‌نمایش پست</h3>
+                <div id="postPreview"></div>
+            </div>
+        </div>
+
+        <!-- صفحه 3: پست‌های زمان‌دار -->
+        <div id="page3" class="content">
+            <div class="card">
+                <h3>🕒 پست‌های زمان‌بندی شده</h3>
+                <div class="scheduled-list" id="scheduledList">
+                    <div class="loading">در حال بارگذاری...</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>⏰ زمان‌بندی جدید</h3>
+                <textarea id="scheduledText" placeholder="متن پست زمان‌دار..."></textarea>
+                <div class="datetime-row">
+                    <input type="date" id="scheduledDate" min="">
+                    <input type="time" id="scheduledTime" value="20:00">
+                </div>
+                <button class="btn btn-warning" onclick="addScheduled()">
+                    ➕ افزودن به زمان‌دار
+                </button>
+            </div>
+        </div>
+
+        <!-- صفحه 4: دسته‌بندی -->
+        <div id="page4" class="content">
+            <div class="card">
+                <h3>🏷️ مدیریت دسته‌بندی‌ها</h3>
+                <div id="categoriesList">
+                    <div class="loading">در حال بارگذاری...</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>➕ افزودن دسته جدید</h3>
+                <input type="text" id="newCatName" placeholder="نام دسته">
+                <input type="text" id="newCatTags" placeholder="کلمات کلیدی (با کاما جدا کنید)">
+                <button class="btn" onclick="addCategory()">
+                    ➕ افزودن دسته
+                </button>
+            </div>
+        </div>
+
+        <!-- صفحه 5: تنظیمات -->
+        <div id="page5" class="content">
+            <div class="card">
+                <h3>⚙️ تنظیمات برنامه</h3>
+                <label>توکن API:</label>
+                <input type="text" value="bot431140:2bbc7c9f-a2e8-4786-900a-0701754f1300" readonly>
+                
+                <label style="margin-top: 15px; display: block;">
+                    <input type="checkbox" id="autoCat" checked> دسته‌بندی خودکار
+                </label>
+                
+                <label style="display: block; margin: 10px 0;">
+                    <input type="checkbox" id="notifications"> اطلاع‌رسانی
+                </label>
+
+                <button class="btn" onclick="saveSettings()">
+                    💾 ذخیره تنظیمات
+                </button>
+            </div>
+
+            <div class="card">
+                <h3>💾 مدیریت داده‌ها</h3>
+                <button class="btn btn-small" onclick="exportData()">
+                    📤 خروجی JSON
+                </button>
+                <button class="btn btn-small btn-danger" onclick="clearData()">
+                    🗑️ پاکسازی داده
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== متغیرهای اصلی ====================
+        const API_TOKEN = "bot431140:2bbc7c9f-a2e8-4786-900a-0701754f1300";
+        
+        let posts = [];
+        let scheduledPosts = [];
+        let categories = {
+            "اخبار": ["اخبار", "خبر"],
+            "آموزشی": ["آموزش", "یادگیری"],
+            "طنز": ["طنز", "خنده"],
+            "فناوری": ["تکنولوژی", "فناوری"],
+            "ورزشی": ["ورزش", "فوتبال"],
+            "متفرقه": []
+        };
+
+        // ==================== تابع‌های عمومی ====================
+        
+        // تغییر صفحه
+        function showPage(pageNum) {
+            // مخفی کردن همه صفحات
+            for(let i = 1; i <= 5; i++) {
+                document.getElementById('page' + i).classList.remove('active');
+                document.getElementById('tab' + i).classList.remove('active');
+            }
+            
+            // نمایش صفحه انتخاب شده
+            document.getElementById('page' + pageNum).classList.add('active');
+            document.getElementById('tab' + pageNum).classList.add('active');
+            
+            // بارگذاری داده‌های صفحه
+            if(pageNum === 1) {
+                loadDashboard();
+            } else if(pageNum === 2) {
+                loadPostPage();
+            } else if(pageNum === 3) {
+                loadScheduledPage();
+            } else if(pageNum === 4) {
+                loadCategoriesPage();
+            }
+        }
+
+        // نمایش پیام
+        function showMsg(text, type = 'info') {
+            const msgDiv = document.getElementById('message');
+            msgDiv.innerHTML = `<div class="message ${type}">${text}</div>`;
+            
+            setTimeout(() => {
+                msgDiv.innerHTML = '';
+            }, 3000);
+        }
+
+        // بارگذاری داده‌ها
+        function loadData() {
+            // بارگذاری پست‌ها
+            const savedPosts = localStorage.getItem('ita_posts');
+            if(savedPosts) {
+                posts = JSON.parse(savedPosts);
+            }
+            
+            // بارگذاری پست‌های زمان‌دار
+            const savedScheduled = localStorage.getItem('ita_scheduled');
+            if(savedScheduled) {
+                scheduledPosts = JSON.parse(savedScheduled);
+            }
+            
+            // بارگذاری دسته‌ها
+            const savedCats = localStorage.getItem('ita_categories');
+            if(savedCats) {
+                categories = JSON.parse(savedCats);
+            }
+            
+            updateStats();
+        }
+
+        // ذخیره داده‌ها
+        function saveData() {
+            localStorage.setItem('ita_posts', JSON.stringify(posts));
+            localStorage.setItem('ita_scheduled', JSON.stringify(scheduledPosts));
+            localStorage.setItem('ita_categories', JSON.stringify(categories));
+        }
+
+        // ==================== صفحه خانه ====================
+        
+        function loadDashboard() {
+            updateStats();
+            showLatestPosts();
+        }
+
+        function updateStats() {
+            document.getElementById('totalPosts').textContent = posts.length;
+            document.getElementById('scheduledCount').textContent = scheduledPosts.length;
+            
+            // پست‌های امروز
+            const today = new Date().toLocaleDateString('fa-IR');
+            const todayCount = posts.filter(p => p.date && p.date.includes(today.split('/')[0])).length;
+            document.getElementById('todayPosts').textContent = todayCount;
+        }
+
+        function showLatestPosts() {
+            const container = document.getElementById('latestPosts');
+            
+            if(posts.length === 0) {
+                container.innerHTML = '<div class="loading">هیچ پستی وجود ندارد</div>';
+                return;
+            }
+            
+            let html = '';
+            const latest = posts.slice(0, 5);
+            
+            latest.forEach(post => {
+                html += `
+                    <div class="post-item">
+                        <div>${post.text.substring(0, 80)}${post.text.length > 80 ? '...' : ''}</div>
+                        <div style="margin-top: 5px;">
+                            ${p
